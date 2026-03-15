@@ -22,6 +22,6 @@ import tea4life.audit_service.dto.base.ApiResponse;
 public class AuditController {
     @GetMapping("/test")
     public ApiResponse<String> test() {
-        return new ApiResponse<>("Hello World");
+        return new ApiResponse<>("Hello Phat dz");
     }
 }
