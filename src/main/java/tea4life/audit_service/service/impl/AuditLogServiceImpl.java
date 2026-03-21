@@ -25,12 +25,12 @@ public class AuditLogServiceImpl implements AuditLogService {
 
     AuditLogRepository auditLogRepository;
     @Override
-    public void saveLog(String entityType, String entityId, String action, Long performedBy, long timestamp, String message) {
+    public void saveLog(String entityType, String entityId, AuditAction action, String performedBy, long timestamp, String message) {
         AuditLog log = AuditLog.builder()
                 .entityType(EntityType.valueOf(entityType))
                 .entityId(entityId)
-                .action(AuditAction.valueOf(action))
-                .performedBy(performedBy)
+                .action(action)
+                .performedBy(performedBy) // Lưu cái Email xuống DB
                 .timestamp(Instant.ofEpochMilli(timestamp))
                 .message(message)
                 .build();
