@@ -8,12 +8,11 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import tea4life.audit_service.dto.event.CategoryAuditEvent;
-import tea4life.audit_service.dto.event.OptionAuditEvent;
-import tea4life.audit_service.dto.event.OptionValueAuditEvent;
-import tea4life.audit_service.dto.event.ProductAuditEvent;
+import tea4life.audit_service.model.enums.AuditAction;
 import tea4life.audit_service.model.enums.EntityType;
 import tea4life.audit_service.service.AuditLogService;
+
+import java.util.Map;
 
 @Component
 @Slf4j
@@ -23,6 +22,13 @@ public class MasterAuditConsumer {
 
     ObjectMapper objectMapper;
     AuditLogService auditLogService;
+    private record AuditMetadata(EntityType entityType, String nameField) {}
+    private static final Map<String, AuditMetadata> AUDIT_DICTIONARY = Map.of(
+            "productId", new AuditMetadata(EntityType.PRODUCT, "productName"),
+            "categoryId", new AuditMetadata(EntityType.CATEGORY, "categoryName"),
+            "optionId", new AuditMetadata(EntityType.PRODUCT_OPTION, "optionName"),
+            "optionValueId", new AuditMetadata(EntityType.PRODUCT_OPTION_VALUE, "valueName")
+    );
 
     @KafkaListener(topics = "${spring.kafka.topic.audit-log}", groupId = "${spring.kafka.consumer.group-id}")
     public void consumeAuditLog(String payload) {
@@ -33,57 +39,35 @@ public class MasterAuditConsumer {
 
             JsonNode jsonNode = objectMapper.readTree(payload);
 
-            if (jsonNode.has("productId")) {
-                ProductAuditEvent event = objectMapper.treeToValue(jsonNode, ProductAuditEvent.class);
-                auditLogService.saveLog(
-                        EntityType.PRODUCT.name(),
-                        event.productId().toString(),
-                        event.action(),
-                        event.performedBy(),
-                        event.timestamp(),
-                        event.message()
-                );
-                log.info("Đã lưu log {} SẢN PHẨM: {}", event.action(), event.productName());
+            for (Map.Entry<String, AuditMetadata> entry : AUDIT_DICTIONARY.entrySet()) {
+                String idField = entry.getKey();
 
-            } else if (jsonNode.has("categoryId")) {
-                CategoryAuditEvent event = objectMapper.treeToValue(jsonNode, CategoryAuditEvent.class);
-                auditLogService.saveLog(
-                        EntityType.CATEGORY.name(),
-                        event.categoryId().toString(),
-                        event.action(),
-                        event.performedBy(),
-                        event.timestamp(),
-                        event.message()
-                );
-                log.info("Đã lưu log {} DANH MỤC: {}", event.action(), event.categoryName());
-            } else if (jsonNode.has("optionId")) {
-                OptionAuditEvent event = objectMapper.treeToValue(jsonNode, OptionAuditEvent.class);
-                auditLogService.saveLog(
-                        EntityType.PRODUCT_OPTION.name(),
-                        event.optionId().toString(),
-                        event.action(),
-                        event.performedBy(),
-                        event.timestamp(),
-                        event.message()
-                );
-                log.info("Đã lưu log {} TÙY CHỌN SẢN PHẨM: {}", event.action(), event.optionName());
+                if (jsonNode.has(idField)) {
+                    AuditMetadata meta = entry.getValue();
 
-            } else if (jsonNode.has("optionValueId")) {
+                    String entityId = jsonNode.get(idField).asText();
+                    String entityName = jsonNode.get(meta.nameField()).asText();
 
-                OptionValueAuditEvent event = objectMapper.treeToValue(jsonNode, OptionValueAuditEvent.class);
-                auditLogService.saveLog(
-                        EntityType.PRODUCT_OPTION_VALUE.name(),
-                        event.optionValueId().toString(),
-                        event.action(),
-                        event.performedBy(),
-                        event.timestamp(),
-                        event.message()
-                );
-                log.info("Đã lưu log {} GIÁ TRỊ TÙY CHỌN: {}", event.action(), event.valueName());
+                    AuditAction action = AuditAction.valueOf(jsonNode.get("action").asText());
+                    String performedBy = jsonNode.get("performedBy").asText();
+                    long timestamp = jsonNode.get("timestamp").asLong();
+                    String message = jsonNode.get("message").asText();
 
-            } else {
-                log.warn("Nhận được Event không xác định định dạng: {}", payload);
+                    auditLogService.saveLog(
+                            meta.entityType().name(),
+                            entityId,
+                            action,
+                            performedBy,
+                            timestamp,
+                            message
+                    );
+
+                    log.info("Đã lưu log {} {}: {}", action, meta.entityType().name(), entityName);
+                    return;
+                }
             }
+
+            log.warn("Nhận được Event không nằm trong Từ Điển: {}", payload);
 
         } catch (Exception ex) {
             log.error("Lỗi khi xử lý Audit Log. Payload: {} - Lỗi: {}", payload, ex.getMessage());
