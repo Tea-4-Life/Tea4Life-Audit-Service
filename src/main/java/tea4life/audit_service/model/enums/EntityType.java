@@ -8,7 +8,6 @@ package tea4life.audit_service.model.enums;
 public enum EntityType {
     PRODUCT,
     CATEGORY,
-    USER,
-    ORDER,
-    SYSTEM
+    PRODUCT_OPTION,
+    PRODUCT_OPTION_VALUE
 }

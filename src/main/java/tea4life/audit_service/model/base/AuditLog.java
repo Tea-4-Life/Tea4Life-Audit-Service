@@ -37,7 +37,7 @@ public class AuditLog {
     AuditAction action;
 
     @Field("performed_by")
-    Long performedBy;
+    String performedBy;;
 
     @Field("timestamp")
     Instant timestamp;
