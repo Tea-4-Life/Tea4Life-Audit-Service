@@ -18,7 +18,7 @@ import tea4life.audit_service.service.AuditLogService;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("/public/audit")
+@RequestMapping("/admin/audit")
 public class AuditController {
     AuditLogService auditLogService;
     @GetMapping
