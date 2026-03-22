@@ -1,6 +1,11 @@
 package tea4life.audit_service.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import tea4life.audit_service.model.base.AuditLog;
 import tea4life.audit_service.model.enums.AuditAction;
+
+import java.util.List;
 
 /**
  * @author : user664dntp
@@ -9,4 +14,6 @@ import tea4life.audit_service.model.enums.AuditAction;
  **/
 public interface AuditLogService {
     void saveLog(String entityType, String entityId, AuditAction action, String performedBy, long timestamp, String message);
+
+    Page<AuditLog> getAllLogs(String entityType, String action, Pageable pageable);
 }
