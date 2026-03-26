@@ -1,12 +1,10 @@
-package tea4life.audit_service.model.base;
+package tea4life.audit_service.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-import tea4life.audit_service.model.enums.AuditAction;
-import tea4life.audit_service.model.enums.EntityType;
 
 import java.time.Instant;
 
@@ -37,7 +35,8 @@ public class AuditLog {
     AuditAction action;
 
     @Field("performed_by")
-    String performedBy;;
+    String performedBy;
+    ;
 
     @Field("timestamp")
     Instant timestamp;

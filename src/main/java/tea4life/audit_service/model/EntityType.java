@@ -1,4 +1,4 @@
-package tea4life.audit_service.model.enums;
+package tea4life.audit_service.model;
 
 /**
  * @author : user664dntp

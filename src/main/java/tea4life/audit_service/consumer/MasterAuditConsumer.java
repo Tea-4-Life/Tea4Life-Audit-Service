@@ -8,8 +8,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import tea4life.audit_service.model.enums.AuditAction;
-import tea4life.audit_service.model.enums.EntityType;
+import tea4life.audit_service.model.AuditAction;
+import tea4life.audit_service.model.EntityType;
 import tea4life.audit_service.service.AuditLogService;
 
 import java.util.Map;
@@ -22,7 +22,10 @@ public class MasterAuditConsumer {
 
     ObjectMapper objectMapper;
     AuditLogService auditLogService;
-    private record AuditMetadata(EntityType entityType, String nameField) {}
+
+    private record AuditMetadata(EntityType entityType, String nameField) {
+    }
+
     private static final Map<String, AuditMetadata> AUDIT_DICTIONARY = Map.of(
             "productId", new AuditMetadata(EntityType.PRODUCT, "productName"),
             "categoryId", new AuditMetadata(EntityType.CATEGORY, "categoryName"),

@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import tea4life.audit_service.dto.base.ApiResponse;
-import tea4life.audit_service.model.base.AuditLog;
+import tea4life.audit_service.dto.ApiResponse;
+import tea4life.audit_service.model.AuditLog;
 import tea4life.audit_service.service.AuditLogService;
 
 @RestController
@@ -21,6 +21,7 @@ import tea4life.audit_service.service.AuditLogService;
 @RequestMapping("/admin/audit")
 public class AuditController {
     AuditLogService auditLogService;
+
     @GetMapping
     public ApiResponse<Page<AuditLog>> getAll(
             @RequestParam(required = false) String entityType,

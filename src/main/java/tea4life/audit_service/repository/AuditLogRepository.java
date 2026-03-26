@@ -2,7 +2,7 @@ package tea4life.audit_service.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
-import tea4life.audit_service.model.base.AuditLog;
+import tea4life.audit_service.model.AuditLog;
 
 /**
  * @author : user664dntp

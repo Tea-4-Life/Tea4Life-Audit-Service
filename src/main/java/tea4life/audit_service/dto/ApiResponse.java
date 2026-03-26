@@ -1,4 +1,4 @@
-package tea4life.audit_service.dto.base;
+package tea4life.audit_service.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;

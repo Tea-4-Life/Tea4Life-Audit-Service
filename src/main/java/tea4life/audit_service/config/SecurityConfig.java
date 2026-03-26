@@ -1,4 +1,4 @@
-package tea4life.audit_service.config.security;
+package tea4life.audit_service.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

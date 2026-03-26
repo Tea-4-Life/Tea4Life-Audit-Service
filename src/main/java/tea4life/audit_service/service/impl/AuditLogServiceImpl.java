@@ -10,9 +10,9 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-import tea4life.audit_service.model.base.AuditLog;
-import tea4life.audit_service.model.enums.AuditAction;
-import tea4life.audit_service.model.enums.EntityType;
+import tea4life.audit_service.model.AuditLog;
+import tea4life.audit_service.model.AuditAction;
+import tea4life.audit_service.model.EntityType;
 import tea4life.audit_service.repository.AuditLogRepository; // Đã có sau khi tạo ở bước 2
 import tea4life.audit_service.service.AuditLogService;
 
@@ -32,6 +32,7 @@ public class AuditLogServiceImpl implements AuditLogService {
 
     AuditLogRepository auditLogRepository;
     MongoTemplate mongoTemplate;
+
     @Override
     public void saveLog(String entityType, String entityId, AuditAction action, String performedBy, long timestamp, String message) {
         AuditLog log = AuditLog.builder()

@@ -2,10 +2,8 @@ package tea4life.audit_service.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import tea4life.audit_service.model.base.AuditLog;
-import tea4life.audit_service.model.enums.AuditAction;
-
-import java.util.List;
+import tea4life.audit_service.model.AuditLog;
+import tea4life.audit_service.model.AuditAction;
 
 /**
  * @author : user664dntp

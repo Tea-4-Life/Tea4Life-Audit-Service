@@ -1,4 +1,4 @@
-package tea4life.audit_service.config.common;
+package tea4life.audit_service.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
